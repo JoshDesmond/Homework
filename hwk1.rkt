@@ -28,6 +28,26 @@ If an expression would result in an error, show all of the steps up to the error
 
 9: (or (< 5 2) (and (= 15 (- 18 3)) (> 8 4)))
 
+
+(or (< 5 2) (and (= 15 (- 18 3)) (> 8 4)))
+     ^^^^^^
+(or false (and (= 15 (- 18 3)) (> 8 4)))
+                     ^^^^^^^^^
+(or false (and (= 15 15) (> 8 4)))
+                ^^^^^^^          
+(or false (and true (> 8 4)))
+                     ^^^^^^^
+(or false (and true true))
+            ^^^^^^^^^^^^
+(or false true)
+^^^^^^^^^^^^^^
+true
+
+
+
+
+
+
 10: (and (+ 5 -1) false)
 
 11: (apply-patch 'remove "this is a test string") [use your own apply-patch program from this assignment]
