@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-advanced-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+#reader(lib "htdp-advanced-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -9,7 +9,41 @@
 ;; Homework Guidelines:
 ;; http://web.cs.wpi.edu/~cs1102/a15/Assignments/grading-general.html
 
-(define (function b))
+;; How to do commments for structs?
+(define-struct patch (position document operation))
+
+;; Consumes an operation, a string, and a number
+;; Produces the resulting string of applying the given operation
+(define (apply-op operation string position)
+  )
+
+;; Consumes a patch and a string
+;; Produces the string resulting from applying the patch to the string
+;; Assumes given string is long enough for the patch
+(define (apply-patch patch string)
+  )
+
+;; Consumes two patches
+;; Produces a boolean, true if the patches overlap
+(define (overlap? patch1 patch2)
+  )
+
+;; Consumes two patches and a string
+;; Produces a string of the result, or false if the patches overlap
+(define (merge string patch1 patch2)
+  )
+
+ 
+#| Question 6.)
+In the previous question, we returned false in the event of an overlap. 
+Another option might have been to just return the original (unmerged) 
+string. What are the advantages of returning false instead of the original 
+string in the event of overlap?
+
+
+|#
+
+
 
 #|
 Evaluate each of the following expressions by hand (use the rules covered in class, which match those of Beginner level). Show every step. In each expression, indicate the subexpression that is evaluated to obtain the next expression. For example:
