@@ -182,8 +182,7 @@
 (define PATCH-INBLAH@2 (make-patch 2 INSERT-BLAH)) ;; Inserts BLAH at position 2 DELETE THESE
 ;; DELETE-5 deletes 5
 ;; DELETE-0 deletes 0
-;; Shwabang
-;; More changes
+
 
 
 ;; Consumes two patches and a string
