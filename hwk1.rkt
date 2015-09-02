@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -9,13 +9,13 @@
 ;; Homework Guidelines:
 ;; http://web.cs.wpi.edu/~cs1102/a15/Assignments/grading-general.html
  
-;;TODOLIST:
+;; TODOLIST:
 ;; Make sure variable names in functions are a-boa
-;; INclude function: num -> string
+;; Include function: num -> string
 ;; Watch the indents
  
  
-;;Insert is (make-insert String)
+;; Insert is (make-insert String)
 ;; An operation that inserts a string at specific location
 (define-struct insert (string))
 (define INSERT-BLAH (make-insert "BLAH"))
@@ -35,7 +35,6 @@
 (define (operation-fun operation)
 (cond [(insert? operation)... insert template here)
       [(delete? operation) ... delete template here)
- 
 |#
  
 ;; A patch is a (make-patch integer operation)
@@ -71,23 +70,21 @@
 (check-expect (apply-patch PATCH-EXAMPLE "123456789") "1234BLAH56789")
 
 
-;;changes to overlap branch
 ;; Overlap?: patch patch -> boolean
 ;; consumes 2 patches and determines if they overlap
-(check-expect (overlap? (make-patch 4 INSERT-BLAH)(make-patch 4 INSERT-BLAH)) true) 
-(check-expect (overlap? (make-patch 4 DELETE3)(make-patch 4 DELETE3)) true) 
-(check-expect (overlap? (make-patch 4 INSERT-BLAH)(make-patch 4 DELETE3)) true) 
-
 (define (overlap? patchA patchB)
   (cond [(and (insert? (patch-operation patchA))
               (insert? (patch-operation patchB)))
          (insertion-overlap? patchA patchB)]
         [(and (delete? (patch-operation patchA))
               (delete? (patch-operation patchB)))
-        (deletion-overlap? patchA patchB)]
-         
-          [else(mixed-overlap patchA patchB)]))
-
+         (deletion-overlap? patchA patchB)]
+        [else(mixed-overlap? patchA patchB)]))
+;; Test cases for overlap?
+(check-expect (overlap? (make-patch 4 INSERT-BLAH)(make-patch 4 INSERT-BLAH)) true) 
+(check-expect (overlap? (make-patch 4 DELETE3)(make-patch 4 DELETE3)) true) 
+(check-expect (overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 DELETE3)) true)
+(check-expect (overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 INSERT-BLAH)) true)
 
 
 
@@ -116,7 +113,7 @@
      (patch-position a-patch)))
 
 
-;;Deletion-overlap?: patch patch -> boolean
+;; Deletion-overlap?: patch patch -> boolean
 ;; both patches myust have deletions as operations, determines if these overlap
 (define (deletion-overlap? patchA patchB)
 
@@ -134,45 +131,23 @@
      (check-expect (deletion-overlap? (make-patch 2 DELETE3)
                                       (make-patch 0 DELETE3))
                    true)
-     
-
-     #|  (check-expect (overlap? (make-patch INSERT-BLAH 4)
-                        (make-patch INSERt-BlAH 4)) true)
-(check-expect (overlap? (make-patch INSERT-BLAH 0)
-                        (make-patch-BLAH 8)) false )
-|#
-
-
-;; put mixed overlap here!
-(define (mixed-overlap patchA patchB)
-  true)
 
 
 
-
-     #|(check-expect (overlap? (make-patch INSERT-BLAH 0)
-                        (make-patch INSERT-BLAH 8)))
-(check-expect (overlap? (make-patch INSERT-BLAH 0)
-
-
-
-(make-patch INSERT-BLAH 8)))
-|#
-
-
+;; ============= Beginning do not touch
 ;; Mixed-overlap?: patch patch -> boolean
 ;; Consumes a patch and a patch
 ;; Produces a boolean
 ;; Determines if the two given patches are compatible or if they overlap.
 ;; patches must be of mixed type. The order of the type does not matter
-(define (Mixed-overlap? patchA patchB)
+(define (mixed-overlap? patchA patchB)
   false) ;;TODO An insertion that starts inside the range of a deletion,
 ;;unless the insertion and deletion start at the same location
  
 ;; Test one, insertion is before deletion -> false
-(check-expect (Mixed-overlap? (make-patch 0 INSERT-BLAH) (make-patch 2 DELETE-2)) false)
+(check-expect (mixed-overlap? (make-patch 0 INSERT-BLAH) (make-patch 2 DELETE-2)) false)
 ;; Test two, insertion is in the middle of deletion -> true
-(check-expect (Mixed-overlap? (make-patch 2 INSERT-BLAH) (make-patch 0 DELETE-5)) true)
+(check-expect (mixed-overlap? (make-patch 2 INSERT-BLAH) (make-patch 0 DELETE-5)) true)
 ;; Test three, insertion is after the deletion -> false
 ;; Test four, insertion is before deletion in reversed order -> false
 ;; Test five, insertion is in the middle of deletion in reversed order -> true
@@ -182,13 +157,12 @@
 (define PATCH-INBLAH@2 (make-patch 2 INSERT-BLAH)) ;; Inserts BLAH at position 2 DELETE THESE
 ;; DELETE-5 deletes 5
 ;; DELETE-0 deletes 0
-
-
+;; ========= END
 
 ;; Consumes two patches and a string
 ;; Produces a string of the result, or false if the patches
-;;(define (merge string patch1 patch2)
-;;)
+(define (merge string patch1 patch2)
+  )
     
      
      #| Question 6.)
