@@ -79,19 +79,36 @@
 ;; helper functions
 ;; Insertions-overlap?: patch patch -> boolean
 ;; Both patches must have insertions as operations determines if they overlap 
-(patch-position patchA)
+(patch-position PATCH-EXAMPLE)
 (define (Insertion-overlap? patchA patchB)
   (= (patch-position patchA)
      (patch-position patchB)))
      
   
-(check-expect (Insertion-overlap? (make-patch INSERT-BLAH 4)
-                        (make-patch INSERT-BLAH 4)) true)
+(check-expect (Insertion-overlap? (make-patch 4 INSERT-BLAH)
+                        (make-patch 4 INSERT-BLAH )) true)
 
-(check-expect (Insertion-overlap? (make-patch INSERT-BLAH 8)
-                        (make-patch INSERT-BLAH 0)) false)
+(check-expect (Insertion-overlap? (make-patch 8 INSERT-BLAH)
+                        (make-patch 0 INSERT-BLAH )) false)
 
 
+;; getRight
+;;Deletion-overlap?: patch patch -> boolean
+;; both patches myust have deletions as operations, determines if these overlap
+(define (Deletion-overlap? patchA patchB)
+  ((define ALeft (patch-position patchA)
+    (define ARight (+ (deletion-number(patch-operation patchA)
+                                (patch-position patchB))))
+(define DELETE3 (make-delete 3))
+(check-expect (Deletion-overlap? (make-patch 5 DELETE3)
+                                 (make-patch 0 DELETE3))
+              true)
+(check-expect (Deletion-overlap? (make-patch 0 DELETE3)
+                                 (make-patch 0 DELETE3))
+              true)
+(check-expect (Deletion-overlap? (make-patch 2 DELETE3)
+                                 (make-patch 0 DELETE3))
+              true)
 
 #|  (check-expect (overlap? (make-patch INSERT-BLAH 4)
                         (make-patch INSERt-BlAH 4)) true)
