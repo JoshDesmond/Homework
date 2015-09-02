@@ -150,6 +150,7 @@
 ;; DELETE-5 deletes 5
 ;; DELETE-0 deletes 0
 ;; Shwabang
+;; More changes
 
 ;; Consumes two patches and a string
 ;; Produces a string of the result, or false if the patches
