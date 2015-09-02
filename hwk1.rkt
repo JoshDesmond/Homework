@@ -133,20 +133,23 @@
 ;; Determines if the two given patches are compatible or if they overlap.
 ;; patches must be of mixed type. The order of the type does not matter
 (define (Mixed-overlap? patchA patchB)
-  (+ 2 2)) ;;TODO An insertion that starts inside the range of a deletion,
+  false) ;;TODO An insertion that starts inside the range of a deletion,
 ;;unless the insertion and deletion start at the same location
  
 ;; Test one, insertion is before deletion -> false
-;; Test two, insertion is in the middle of deletion -> true 
+(check-expect (Mixed-overlap? (make-patch 0 INSERT-BLAH) (make-patch 2 DELETE-2)) false)
+;; Test two, insertion is in the middle of deletion -> true
+(check-expect (Mixed-overlap? (make-patch 2 INSERT-BLAH) (make-patch 0 DELETE-5)) true)
 ;; Test three, insertion is after the deletion -> false
 ;; Test four, insertion is before deletion in reversed order -> false
 ;; Test five, insertion is in the middle of deletion in reversed order -> true
  
 (define DELETE-2 (make-delete 2))
-(define PATCH-D2@2 (make-patch 2 DELETE-2)) ;; Deletes 2 characters starting at position 2
-(define PATCH-INBLAH@2 (make-patch 2 INSERT-BLAH)) ;; Inserts BLAH at position 2
+(define PATCH-D2@2 (make-patch 2 DELETE-2)) ;; Deletes 2 characters starting at position 2 DELETE THESE
+(define PATCH-INBLAH@2 (make-patch 2 INSERT-BLAH)) ;; Inserts BLAH at position 2 DELETE THESE
 ;; DELETE-5 deletes 5
 ;; DELETE-0 deletes 0
+;; Shwabang
 
 ;; Consumes two patches and a string
 ;; Produces a string of the result, or false if the patches
