@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -125,6 +125,26 @@
 ;;(define (merge string patch1 patch2)
   ;;)
 
+;; Mixed-overlap?: patch patch -> boolean
+;; Consumes a patch and a patch
+;; Produces a boolean
+;; Determines if the two given patches are compatible or if they overlap.
+;; patches must be of mixed type. The order of the type does not matter
+(define (Mixed-overlap? patchA patchB)
+  (+ 2 2)) ;;TODO An insertion that starts inside the range of a deletion,
+;;unless the insertion and deletion start at the same location
+
+;; Test one, insertion is before deletion -> false
+;; Test two, insertion is in the middle of deletion -> true 
+;; Test three, insertion is after the deletion -> false
+;; Test four, insertion is before deletion in reversed order -> false
+;; Test five, insertion is in the middle of deletion in reversed order -> true
+
+(define DELETE-2 (make-delete 2))
+(define PATCH-D2@2 (make-patch 2 (DELETE-2))) ;; Deletes 2 characters starting at position 2
+(define PATCH-INBLAH@2 (make-patch 2 (INSERT-BLAH))) ;; Inserts BLAH at position 2
+;; DELETE-5 deletes 5
+;; DELETE-0 deletes 0
  
 #| Question 6.)
 In the previous question, we returned false in the event of an overlap. 
