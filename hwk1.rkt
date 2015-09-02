@@ -9,17 +9,12 @@
 ;; Homework Guidelines:
 ;; http://web.cs.wpi.edu/~cs1102/a15/Assignments/grading-general.html
 
-;; How to do commments for structs?
-;; A patch is a (make-patch integer operation)
-;; it takes a position to start, and operation done at this position 
-(define-struct patch (position operation))
-#|
-(define (patch-fun patch)
-... (
+;;TODOLIST:
+;; Make sure variable names in functions are a-boa
+;; INclude function: num -> string
+;; Watch the indents
 
 
-
-|#
 ;;Insert is (make-insert String)
 ;; An operation that inserts a string at specific location
 (define-struct insert (string))
@@ -43,6 +38,16 @@
 
 |#
 
+;; A patch is a (make-patch integer operation)
+;; it takes a position to start, and operation done at this position 
+(define-struct patch (position operation))
+#|
+(define (patch-fun patch)
+  (patch-position patch)...
+  (cond [(insert? (patch-operation operation))... )
+        [(delete? (patch-operation operation)) ...)
+|#
+(define PATCH-EXAMPLE (make-patch 4 INSERT-BLAH))
 
 ;; Consumes an operation, a string, and a number
 ;; Produces the resulting string of applying the given operation
@@ -54,17 +59,50 @@
 (check-expect (apply-op INSERT-BLAH "abcdefg" 4) "abcdBLAHefg")
 (check-expect (apply-op (make-insert "Dopa") "DopaSeratonin" 4) "DopaDopaSeratonin")
 (check-expect (apply-op DELETE-5 "123456789" 3) "1239")
+
+;; apply-patch: patch string -> string
 ;; Consumes a patch and a string
 ;; Produces the string resulting from applying the patch to the string
 ;; Assumes given string is long enough for the patch
-;;(define (apply-patch patch string)
-  ;;)
+(define (apply-patch a-patch string)
+  (apply-op (patch-operation a-patch) string (patch-position a-patch)))
 
-;; Consumes two patches
-;; Produces a boolean, true if the patches overlap
-;;(define (overlap? patch1 patch2)
-  ;;)
+(check-expect (apply-patch PATCH-EXAMPLE "123456789") "1234BLAH56789")
 
+;; Overlap?: patch patch -> boolean
+;; consumes 2 patches and determines if they overlap 
+
+
+
+
+
+;; helper functions
+;; Insertions-overlap?: patch patch -> boolean
+;; Both patches must have insertions as operations determines if they overlap 
+(patch-position patchA)
+(define (Insertion-overlap? patchA patchB)
+  (= (patch-position patchA)
+     (patch-position patchB)))
+     
+  
+(check-expect (Insertion-overlap? (make-patch INSERT-BLAH 4)
+                        (make-patch INSERT-BLAH 4)) true)
+
+(check-expect (Insertion-overlap? (make-patch INSERT-BLAH 8)
+                        (make-patch INSERT-BLAH 0)) false)
+
+
+
+#|  (check-expect (overlap? (make-patch INSERT-BLAH 4)
+                        (make-patch INSERt-BlAH 4)) true)
+(check-expect (overlap? (make-patch INSERT-BLAH 0)
+                        (make-patch-BLAH 8)) false )
+|#
+#|(check-expect (overlap? (make-patch INSERT-BLAH 0)
+                        (make-patch INSERT-BLAH 8)))
+(check-expect (overlap? (make-patch INSERT-BLAH 0)
+                        (make-patch INSERT-BLAH 8)))
+|#
 ;; Consumes two patches and a string
 ;; Produces a string of the result, or false if the patches
 ;;(define (merge string patch1 patch2)
