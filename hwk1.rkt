@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-advanced-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -10,28 +10,66 @@
 ;; http://web.cs.wpi.edu/~cs1102/a15/Assignments/grading-general.html
 
 ;; How to do commments for structs?
-(define-struct patch (position document operation))
+;; A patch is a (make-patch integer operation)
+;; it takes a position to start, and operation done at this position 
+(define-struct patch (position operation))
+#|
+(define (patch-fun patch)
+... (
+
+
+
+|#
+;;Insert is (make-insert String)
+;; An operation that inserts a string at specific location
+(define-struct insert (string))
+(define INSERT-BLAH (make-insert "BLAH"))
+;;template
+;;*?? Do we need a template, it seems too sim
+
+;; Delete is (make-delete number)
+;; number of characters deleted at a point
+;; ?? Do we need to specify negative numbers
+(define-struct delete(number))
+(define DELETE-5 (make-delete 5))
+(define DELETE-0 (make-delete 0))
+
+
+;; Operation is either insert or delete
+#|
+(define (operation-fun operation)
+(cond [(insert? operation)... insert template here)
+      [(delete? operation) ... delete template here)
+
+|#
+
 
 ;; Consumes an operation, a string, and a number
 ;; Produces the resulting string of applying the given operation
 (define (apply-op operation string position)
-  )
+  (cond [(insert? operation) (string-append (string-append (substring string 0 position)
+                                            (insert-string operation))
+                                            (substring string position))]
+ ;;[(delete? operation)]))
+))
+(check-expect (apply-op INSERT-BLAH "abcdefg" 4) "abcdBLAHefg")
+(check-expect (apply-op (make-insert "Dopa") "DopamineSeratonin" 4) "DopaDopamineSeratonin")
 
 ;; Consumes a patch and a string
 ;; Produces the string resulting from applying the patch to the string
 ;; Assumes given string is long enough for the patch
-(define (apply-patch patch string)
-  )
+;;(define (apply-patch patch string)
+  ;;)
 
 ;; Consumes two patches
 ;; Produces a boolean, true if the patches overlap
-(define (overlap? patch1 patch2)
-  )
+;;(define (overlap? patch1 patch2)
+  ;;)
 
 ;; Consumes two patches and a string
-;; Produces a string of the result, or false if the patches overlap
-(define (merge string patch1 patch2)
-  )
+;; Produces a string of the result, or false if the patches
+;;(define (merge string patch1 patch2)
+  ;;)
 
  
 #| Question 6.)
