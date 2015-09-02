@@ -50,11 +50,10 @@
   (cond [(insert? operation) (string-append (string-append (substring string 0 position)
                                             (insert-string operation))
                                             (substring string position))]
- ;;[(delete? operation)]))
-))
+ [(delete? operation)   (string-append (substring string 0 position) (substring string (+ position (delete-number operation))))]))
 (check-expect (apply-op INSERT-BLAH "abcdefg" 4) "abcdBLAHefg")
-(check-expect (apply-op (make-insert "Dopa") "DopamineSeratonin" 4) "DopaDopamineSeratonin")
-
+(check-expect (apply-op (make-insert "Dopa") "DopaSeratonin" 4) "DopaDopaSeratonin")
+(check-expect (apply-op DELETE-5 "123456789" 3) "1239")
 ;; Consumes a patch and a string
 ;; Produces the string resulting from applying the patch to the string
 ;; Assumes given string is long enough for the patch
@@ -97,7 +96,7 @@ Evaluate each of the following expressions by hand (use the rules covered in cla
 If an expression would result in an error, show all of the steps up to the error, then indicate the error message you'd get (error messages don't need to be verbatim, as long as they convey the right kind of error). You can use the Stepper to check your answers, but do the problem manually first to make sure you understand how Racket works.
 
 8: (/ (- (* 9 3) (double 'a)) 2) where double is defined as (define (double n) (* n 2))
-
+Dez
 9: (or (< 5 2) (and (= 15 (- 18 3)) (> 8 4)))
 
 
@@ -121,16 +120,17 @@ true
 
 
 10: (and (+ 5 -1) false)
-
+Dez
 11: (apply-patch 'remove "this is a test string") [use your own apply-patch program from this assignment]
-
+Saa
 Debugging Racket Programs
 
 For each of the following DrRacket error messages (from Beginner language level), describe what code that produces this error message would look like and provide a small illustrative example of code that would yield this error. Your description should not simply restate the error message!
 
 12: cond: expected a clause with a question and answer, but found a clause with only one part
-
+Josh
 13: x: this variable is not defined
-
+Saa
 14: function call: expected a function after an open parenthesis, but found a number
+Josh
 |#
