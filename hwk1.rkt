@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -41,6 +41,7 @@
 (define-struct delete(number))
 (define DELETE-5 (make-delete 5))
 (define DELETE-0 (make-delete 0))
+(define DELETE-2 (make-delete 2))
 #| Delete Template
 (define (delete-fun a-delete)
   ((delete-number a-delete)...))
@@ -97,25 +98,36 @@
   (apply-op (patch-operation a-patch) string (patch-position a-patch)))
  
 ;; apply-patch: Test Cases
+;; Test 1, apply an insert
 (check-expect (apply-patch PATCH-EXAMPLE "123456789") "1234BLAH56789")
+;; Test 2, apply a deletion
+(check-expect (apply-patch (make-patch 3 DELETE-5) "abcdefgh") "abc")
+;; Test 3, apply an empty deletion
+(check-expect (apply-patch (make-patch 2 DELETE-0) "abcd") "abcd")
 
 ;; ~~~~~~~~~overlap?~~~~~~~~~~~~~~~~
 ;; overlap?: patch patch -> boolean
 ;; consumes 2 patches and determines if they overlap
 (define (overlap? patchA patchB)
-  (cond [(and (insert? (patch-operation patchA))
+  (cond [(and (insert? (patch-operation patchA)) ;; If they are both inserts
               (insert? (patch-operation patchB)))
-         (insertion-overlap? patchA patchB)]
-        [(and (delete? (patch-operation patchA))
+         (insertion-overlap? patchA patchB)] ;; Call insertion-overlap
+        [(and (delete? (patch-operation patchA)) ;; if they are both deletions
               (delete? (patch-operation patchB)))
-         (deletion-overlap? patchA patchB)]
-        [else(mixed-overlap? patchA patchB)]))
+         (deletion-overlap? patchA patchB)] ;; Check if deletion overlap
+        [else (mixed-overlap? patchA patchB)])) ;; Else means patchA and patchB are of mixedType. Order does not matter.
 
 ;; overlap?: Test Cases
-(check-expect (overlap? (make-patch 4 INSERT-BLAH)(make-patch 4 INSERT-BLAH)) true) 
+;; Test 1, two overlapping insertions -> true
+(check-expect (overlap? (make-patch 4 INSERT-BLAH)(make-patch 4 INSERT-BLAH)) true)
+;; Test 2, two overlapping deletions -> true
 (check-expect (overlap? (make-patch 4 DELETE3)(make-patch 4 DELETE3)) true) 
+;; Test 3, a deletion and an insertion both at same position -> false
 (check-expect (overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 DELETE3)) false)
-(check-expect (overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 INSERT-BLAH)) true)
+;; Test 4,  an insertion and deletion that don't overlap
+(check-expect (overlap? (make-patch 2 INSERT-BLAH) (make-patch 5 DELETE-5)) false)
+;; Test 5, a deletion and an insertion that don't overlap
+(check-expect (overlap? (make-patch 5 DELETE-5) (make-patch 2 INSERT-BLAH)) false)
 
 
 ;; ~~~~~~~~~~insertions-overlap?~~~~~~~~~~~~~~~~
@@ -132,19 +144,9 @@
                                   (make-patch 4 INSERT-BLAH )) true)
 (check-expect (insertion-overlap? (make-patch 8 INSERT-BLAH)
                                   (make-patch 0 INSERT-BLAH )) false)
+(check-expect (insertion-overlap? (make-patch 4 INSERT-BLAH)
+                                  (make-patch 6 (make-insert "x"))) false)
 
-
-
-;; ~~~~~~~~~~getRight~~~~~~~~~~~~~
-;; getRight: patch -> number
-;; Consumes a patch with deletion as its operation
-;; Returns the position where the deletion ends
-;; a-patch must have a deletion as its operation.
-(define (getRight a-patch)
-  (+ (delete-number(patch-operation a-patch))
-     (patch-position a-patch)))
-;; getRight: Test Cases
-(check-expect (getRight (make-patch 4 (make-delete 3))) 7)
 
 ;; ~~~~~~~~~~~deletion-overlap?~~~~~~~~~~~~
 ;; deletion-overlap?: patch patch -> boolean
@@ -170,6 +172,23 @@
 (check-expect (deletion-overlap? (make-patch 3 DELETE3)
                                  (make-patch 0 DELETE3))
               false)
+(check-expect (deletion-overlap? (make-patch 0 DELETE-0)
+                                 (make-patch 0 DELETE-0))
+              false)
+
+
+;; ~~~~~~~~~~getRight~~~~~~~~~~~~~
+;; getRight: patch -> number
+;; Consumes a patch with deletion as its operation
+;; Returns the position where the deletion ends
+;; a-patch must have a deletion as its operation.
+(define (getRight a-patch)
+  (+ (delete-number(patch-operation a-patch))
+     (patch-position a-patch)))
+;; getRight: Test Cases
+(check-expect (getRight (make-patch 4 (make-delete 3))) 7)
+(check-expect (getRight (make-patch 2 DELETE-0)) 2)
+(check-expect (getRight (make-patch 2 DELETE-5)) 7)
 
 ;; ~~~~~~~~~~~mixed-overlap?~~~~~~~~~~~~~~~
 ;; mixed-overlap?: patch patch -> boolean
@@ -194,8 +213,8 @@
 (check-expect (mixed-overlap? (make-patch 5 DELETE-2) (make-patch 1 INSERT-BLAH)) false)
 ;; Test five, insertion is in the middle of deletion in reversed order -> true
 (check-expect (mixed-overlap? (make-patch 4 DELETE-5) (make-patch 6 INSERT-BLAH)) true)
- 
-(define DELETE-2 (make-delete 2))
+;; test six, insertion is at the same position of an empty delete -> false
+(check-expect (mixed-overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 DELETE-0)) false)
 
 ;; ~~~~~~~~~~~~merge~~~~~~~~~~~
 ;; merge: string patch1 patch2 -> string (or boolean)
@@ -328,11 +347,21 @@ Evaluate each of the following expressions by hand (use the rules covered in cla
       = 5
 If an expression would result in an error, show all of the steps up to the error, then indicate the error message you'd get (error messages don't need to be verbatim, as long as they convey the right kind of error). You can use the Stepper to check your answers, but do the problem manually first to make sure you understand how Racket works.
  
+
+~~~~~~~
 8: (/ (- (* 9 3) (double 'a)) 2) where double is defined as (define (double n) (* n 2))
-Dez
-9: (or (< 5 2) (and (= 15 (- 18 3)) (> 8 4)))
- 
- 
+(/ (- (* 9 3) (double 'a)) 2)
+      ^^^^^^^         
+(/ (- 27 (double 'a)) 2)
+          ^^^^^^^^^^
+(/ (- 27 (* 'a 2)) 2)
+         ^^^^^^^^
+error: "expects a number as 1st argument, given 'a"
+(or, in my own words: illegal argument given to the function *)
+
+
+~~~~~~~
+9: (or (< 5 2) (and (= 15 (- 18 3)) (> 8 4))) 
 (or (< 5 2) (and (= 15 (- 18 3)) (> 8 4)))
      ^^^^^^
 (or false (and (= 15 (- 18 3)) (> 8 4)))
@@ -347,13 +376,16 @@ Dez
 ^^^^^^^^^^^^^^
 true
  
- 
- 
- 
- 
- 
+~~~~~~~ 
 10: (and (+ 5 -1) false)
-Dez
+          ^^^^^^^
+    (and 4 false)
+    ^^^^^^^^^^^^^
+
+error: "and: question result is not true or false: 4"
+      (or, in my own words: "input type invadlid for function 'and'")
+
+~~~~~~~
 11: (apply-patch 'remove "this is a test string") [use your own apply-patch program from this assignment]
  (apply-patch remove "this is a test string")
 
@@ -519,20 +551,25 @@ Dez
 
                                                 
 Saa
-Debugging Racket Programs
- 
+
+
+=====Debugging Racket Programs=====
 For each of the following DrRacket error messages (from Beginner language level), describe what code that produces this error message would look like and provide a small illustrative example of code that would yield this error. Your description should not simply restate the error message!
  
+~~~~~~~
 12: cond: expected a clause with a question and answer, but found a clause with only one part
-Josh
+Code: (cond [(= 5 5)])
+This error is caused by an incomplete cond expression, missing either a conditional function at the beginning or a clause which is evaluated after. If there are not two clauses in the square brackets: "(cond [])", that error will occur.
+
+~~~~~~~
 13: x: this variable is not defined
 Code: (+ x 5)
 This error message appears when x is used in a function but does not evaluate to a value. In this cas, it would be expected
 that x would evaluate to an integer. But, it is not defined anywhere to be an integer. 
-Saa
+
+~~~~~~~
 14: function call: expected a function after an open parenthesis, but found a number
-Josh
+Code: (+ (+ 1 2) (3))
+This error message will appear when a number is wrapped around parenthesis. In the above example, "(3)" is causing the error.
 
 |#
-     
-
