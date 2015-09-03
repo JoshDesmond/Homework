@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -132,6 +132,9 @@
                                       (make-patch 0 DELETE3))
                    true)
 
+(check-expect (deletion-overlap? (make-patch 0 DELETE3)
+                                 (make-patch 3 DELETE3))
+              false)
 
 ;; Mixed-overlap?: patch patch -> boolean
 ;; Consumes a patch and a patch
@@ -157,10 +160,38 @@
  
 (define DELETE-2 (make-delete 2))
 
+;; merge: string patch1 patch2 -> string (or boolean)
 ;; Consumes two patches and a string
-;; Produces a string of the result, or false if the patches
-;; define (merge string patch1 patch2)
-;; )
+;; Produces a string of the result, or false if the patches are not compatible
+(define (merge doc-string patch1 patch2)
+  (cond [(overlap? patch1 patch2) false]
+        [else (cond [(> (patch-position patch1) (patch-position patch2)) (merge doc-string patch2 patch1)]
+                    [else (apply-patch patch1 (apply-patch patch2 doc-string))])]))
+
+;; Test Cases
+(define TEST-DOC "abcdefg")
+(define DEL-efg (make-patch 4 DELETE3))
+(define DEL-bcd (make-patch 1 DELETE3))
+(define INS-x (make-insert "x"))
+;; Test case 1, successful merge, delete efg, insert x at b
+(check-expect (merge TEST-DOC DEL-efg (make-patch 2 INS-x)) "abxcd")
+;; Test case 2, successful merge, insert x at b, delete efg
+(check-expect (merge TEST-DOC (make-patch 2 INS-x) DEL-efg) "abxcd")
+;; Test case 3, unsuccessful merge, insert x at f, delete efg
+(check-expect (merge TEST-DOC (make-patch 6 INS-x) DEL-efg) false)
+;; Test case 4, successful merge, insert x at f, delete bcd
+(check-expect (merge TEST-DOC (make-patch 6 INS-x) DEL-bcd) "aefxg")
+;; Test case 5, successful merge, delete bcd, delete efg
+(check-expect (merge TEST-DOC DEL-bcd DEL-efg) "a")
+;; Test case 6, successful merge, delete efg, delete bcd
+(check-expect (merge TEST-DOC DEL-efg DEL-bcd) "a")
+;; Test case 7, successful insert x at b, insert x at g
+(check-expect (merge TEST-DOC (make-patch 2 INS-x) (make-patch 7 INS-x)) "abxcdefgx")
+;; Test case 8, unsuccessful merge, delete efg, delete g
+(check-expect (merge TEST-DOC DEL-efg (make-patch 7 (make-delete 1))) false)
+;; Test case 9, unsuccessful merge, delete cdef, delete bc
+(check-expect (merge TEST-DOC (make-patch 3 DELETE3)(make-patch 2 (make-delete 2))) false)
+
     
      
      #| Question 6.)
