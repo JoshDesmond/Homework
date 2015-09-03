@@ -83,7 +83,7 @@
 ;; Test cases for overlap?
 (check-expect (overlap? (make-patch 4 INSERT-BLAH)(make-patch 4 INSERT-BLAH)) true) 
 (check-expect (overlap? (make-patch 4 DELETE3)(make-patch 4 DELETE3)) true) 
-(check-expect (overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 DELETE3)) true)
+(check-expect (overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 DELETE3)) false)
 (check-expect (overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 INSERT-BLAH)) true)
 
 
@@ -133,36 +133,34 @@
                    true)
 
 
-
-;; ============= Beginning do not touch
 ;; Mixed-overlap?: patch patch -> boolean
 ;; Consumes a patch and a patch
 ;; Produces a boolean
 ;; Determines if the two given patches are compatible or if they overlap.
 ;; patches must be of mixed type. The order of the type does not matter
 (define (mixed-overlap? patchA patchB)
-  false) ;;TODO An insertion that starts inside the range of a deletion,
-;;unless the insertion and deletion start at the same location
+  (cond [(delete? (patch-operation patchA))
+         (mixed-overlap? patchB patchA)]
+        [else (cond [(<= (patch-position patchA) (patch-position patchB)) false]
+                    [else (< (patch-position patchA) (getRight patchB))])]))
  
 ;; Test one, insertion is before deletion -> false
 (check-expect (mixed-overlap? (make-patch 0 INSERT-BLAH) (make-patch 2 DELETE-2)) false)
 ;; Test two, insertion is in the middle of deletion -> true
 (check-expect (mixed-overlap? (make-patch 2 INSERT-BLAH) (make-patch 0 DELETE-5)) true)
 ;; Test three, insertion is after the deletion -> false
+(check-expect (mixed-overlap? (make-patch 10 INSERT-BLAH) (make-patch 0 DELETE-5)) false)
 ;; Test four, insertion is before deletion in reversed order -> false
+(check-expect (mixed-overlap? (make-patch 5 DELETE-2) (make-patch 1 INSERT-BLAH)) false)
 ;; Test five, insertion is in the middle of deletion in reversed order -> true
+(check-expect (mixed-overlap? (make-patch 4 DELETE-5) (make-patch 6 INSERT-BLAH)) true)
  
 (define DELETE-2 (make-delete 2))
-(define PATCH-D2@2 (make-patch 2 DELETE-2)) ;; Deletes 2 characters starting at position 2 DELETE THESE
-(define PATCH-INBLAH@2 (make-patch 2 INSERT-BLAH)) ;; Inserts BLAH at position 2 DELETE THESE
-;; DELETE-5 deletes 5
-;; DELETE-0 deletes 0
-;; ========= END
 
 ;; Consumes two patches and a string
 ;; Produces a string of the result, or false if the patches
-(define (merge string patch1 patch2)
-  )
+;; define (merge string patch1 patch2)
+;; )
     
      
      #| Question 6.)
