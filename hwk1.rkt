@@ -355,6 +355,169 @@ true
 10: (and (+ 5 -1) false)
 Dez
 11: (apply-patch 'remove "this is a test string") [use your own apply-patch program from this assignment]
+ (apply-patch remove "this is a test string")
+
+1. (apply-patch removeExample "this is a test string")
+               ^^^^^^^^^^^^
+2. (apply-patch (make-patch 3 (make-delete 2)) "this is a test string")
+    ^^^^^^^^^^
+3. (apply-op(patch-operation(make-patch3(make-delete 2))) "this is a test string" (patch-position(make-patch3 (make-delete 2))))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+4. (apply-op(make-delete 2)) "this is a test string" (patch-position(make-patch 3 (make-delete 2)))) 
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5. (apply-op(make-delete 2)) "this is a test string" 3 ))) 
+   ^^^^^^^^^
+
+6. (cond
+ ((insert? (make-delete 2))
+   ^^^^^^^^^^^^^^^^^^^^^^^^
+  (string-append
+   (string-append
+    (substring
+     "this is a test string"
+     0
+     3)
+    (insert-string
+     (make-delete 2)))
+   (substring
+    "this is a test string"
+    3)))
+ ((delete? (make-delete 2))
+  (string-append
+   (substring
+    "this is a test string"
+    0
+    3)
+   (substring
+    "this is a test string"
+    (+
+     3
+     (delete-number
+      (make-delete 2)))))))
+7. (cond
+ ( false )
+^^^^^^^^^^^^^^^^^
+  (string-append
+^^^^^^^^^^^^^^^^^^^
+   (string-append
+^^^^^^^^^^^^^^^^^^^
+    (substring
+^^^^^^^^^^^^^^^^^
+     "this is a test string"
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+     0
+^^^^^^^^^^^
+     3)
+^^^^^^^^^^
+    (insert-string
+^^^^^^^^^^^^^^^^^^^
+     (make-delete 2)))
+^^^^^^^^^^^^^^^^^^^^
+   (substring
+^^^^^^^^^^^^^^^^
+    "this is a test string"
+^^^^^^^^^^^^^^^^^^^^^^^^^
+    3)))
+^^^^^^^^^^^^^^^^
+ ((delete? (make-delete 2))
+  (string-append
+   (substring
+    "this is a test string"
+    0
+    3)
+   (substring
+    "this is a test string"
+    (+
+     3
+     (delete-number
+      (make-delete 2)))))))
+
+8. (cond
+ ((delete? (make-delete 2))
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  (string-append
+   (substring
+    "this is a test string"
+    0
+    3)
+   (substring
+    "this is a test string"
+    (+
+     3
+     (delete-number
+      (make-delete 2)))))))
+9. (cond
+^^^^^^^^^
+ (true)
+^^^^^^^^^^
+  (string-append
+   (substring
+    "this is a test string"
+    0
+    3)
+   (substring
+    "this is a test string"
+    (+
+     3
+     (delete-number
+      (make-delete 2)))))))
+10. (string-append
+   (substring
+    ^^^^^^^^^^^^^^^^
+    "this is a test string"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    0
+^^^^^^^^
+    3)
+^^^^^^^^^^
+   (substring
+    "this is a test string"
+    (+
+     3
+     (delete-number
+      (make-delete 2)))))))
+11. (string-append
+   "thi"
+   (substring
+    "this is a test string"
+    (+
+     3
+     (delete-number
+^^^^^^^^^^^^^^^^^^^^
+      (make-delete 2)))))))
+       ^^^^^^^^^^^^^
+12. (string-append
+   "thi"
+   (substring
+    "this is a test string"
+    (+
+     3
+     2 )))
+13. (string-append
+   "thi"
+   (substring
+    "this is a test string"
+    (+
+    ^^^
+     3
+    ^^^
+     2 )))
+    ^^^^
+14. (string-append
+   "thi"
+   (substring
+ ^^^^^^^^^^^^^^
+    "this is a test string"
+^^^^^^^^^^^^^^^^^^^^^^^^^
+    5))
+^^^^^
+15. (string-append
+   "thi"
+  "is a test string")
+16.  "thiis a test string"        
+
+                                                
 Saa
 Debugging Racket Programs
  
@@ -363,6 +526,9 @@ For each of the following DrRacket error messages (from Beginner language level)
 12: cond: expected a clause with a question and answer, but found a clause with only one part
 Josh
 13: x: this variable is not defined
+Code: (+ x 5)
+This error message appears when x is used in a function but does not evaluate to a value. In this cas, it would be expected
+that x would evaluate to an integer. But, it is not defined anywhere to be an integer. 
 Saa
 14: function call: expected a function after an open parenthesis, but found a number
 Josh
