@@ -205,18 +205,18 @@ Also, the false that is returned in by the overlap? more clearly answers the que
  
 |#
 ;; replace 176 with current string length
-(define patch1 (make-patch (- 176 18) (make-delete 4)))
-(define patch2 (make-patch (- 172 14) (make-insert "it's totally")))
-(define patch3 (make-patch (- 184 91) (make-delete 4)))
-(define patch4 (make-patch (- 180 87) (make-insert "it is")))
-(define patch5 (make-patch (- 185 96) (make-delete 4)))
-(define patch6 (make-patch (- 181 102) (make-delete 8)))
-(define patch7 (make-patch (- 173 94) (make-insert "golly")))
-(define patch8 (make-patch (- 178 132) (make-delete 2)))
-(define patch9 (make-patch (- 176 130) (make-insert "the")))
-(define patch10 (make-patch (- 179 147) (make-insert "over there ")))
-(define patch11 (make-patch (- 190 171) (make-delete 6)))
-(define patch12 (make-patch (- 184 165)(make-insert "that")))
+(define patch1 (make-patch (158) (make-delete 4)))
+(define patch2 (make-patch (158) (make-insert "it's totally")))
+(define patch3 (make-patch (93) (make-delete 4)))
+(define patch4 (make-patch (93) (make-insert "it is")))
+(define patch5 (make-patch (89) (make-delete 4)))
+(define patch6 (make-patch (79) (make-delete 8)))
+(define patch7 (make-patch (79) (make-insert "golly")))
+(define patch8 (make-patch (46) (make-delete 2)))
+(define patch9 (make-patch (46) (make-insert "the")))
+(define patch10 (make-patch (32) (make-insert "over there ")))
+(define patch11 (make-patch (19) (make-delete 6)))
+(define patch12 (make-patch (19)(make-insert "that")))
 
 (define original "Hamlet: Do you see yonder cloud that's almost in shape of a camel?Polonius: By the mass, and 'tis like a camel, indeed.[...]Hamlet: Or like a whale?Polonius: Very like a whale.")
 
