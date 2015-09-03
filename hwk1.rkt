@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -62,9 +62,12 @@
 ;; ===============================
 ;; ===============================
  
+
+
 ;; ===============================
 ;; ===========Functions===========
 ;; ===============================
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; apply-op: operation string number -> string
 ;; Consumes an operation, a string, and a number
 ;; Produces the resulting string of applying the given operation
@@ -76,11 +79,12 @@
         [(delete? operation)   (string-append (substring string 0 position) ;;Append the beginning of the string
                                               (substring string (+ position ;; To the second splice of the string
                                                                    (delete-number operation))))]))
-;; Test cases:
+;; apply-op: Test Cases
 (check-expect (apply-op INSERT-BLAH "abcdefg" 4) "abcdBLAHefg")
 (check-expect (apply-op (make-insert "Dopa") "DopaSeratonin" 4) "DopaDopaSeratonin")
 (check-expect (apply-op DELETE-5 "123456789" 3) "1239")
  
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; apply-patch: patch string -> string
 ;; Consumes a patch and a string
 ;; Produces the string resulting from applying the patch to the string
@@ -88,9 +92,10 @@
 (define (apply-patch a-patch string)
   (apply-op (patch-operation a-patch) string (patch-position a-patch)))
  
+;; apply-patch: Test Cases
 (check-expect (apply-patch PATCH-EXAMPLE "123456789") "1234BLAH56789")
 
-
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; Overlap?: patch patch -> boolean
 ;; consumes 2 patches and determines if they overlap
 (define (overlap? patchA patchB)
@@ -101,15 +106,15 @@
               (delete? (patch-operation patchB)))
          (deletion-overlap? patchA patchB)]
         [else(mixed-overlap? patchA patchB)]))
-;; Test cases for overlap?
+
+;; overlap?: Test Cases
 (check-expect (overlap? (make-patch 4 INSERT-BLAH)(make-patch 4 INSERT-BLAH)) true) 
 (check-expect (overlap? (make-patch 4 DELETE3)(make-patch 4 DELETE3)) true) 
 (check-expect (overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 DELETE3)) false)
 (check-expect (overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 INSERT-BLAH)) true)
 
 
-
-;; helper functions
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; Insertions-overlap?: patch patch -> boolean
 ;; Both patches must have insertions as operations determines if they overlap 
 (patch-position PATCH-EXAMPLE)
@@ -117,7 +122,7 @@
   (= (patch-position patchA)
      (patch-position patchB)))
 
-
+;; Insertions-overlap?: Test Cases
 (check-expect (insertion-overlap? (make-patch 4 INSERT-BLAH)
                                   (make-patch 4 INSERT-BLAH )) true)
 
@@ -125,15 +130,16 @@
                                   (make-patch 0 INSERT-BLAH )) false)
 
 
-
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; getRight: patch (deletion) -> num
 ;; gets a deletion patch and determines right bound of range
-(check-expect (getRight (make-patch 4 (make-delete 3))) 7)
 (define (getRight a-patch)
   (+ (delete-number(patch-operation a-patch))
      (patch-position a-patch)))
+;; getRight: Test Cases
+(check-expect (getRight (make-patch 4 (make-delete 3))) 7)
 
-
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; Deletion-overlap?: patch patch -> boolean
 ;; both patches myust have deletions as operations, determines if these overlap
 (define (deletion-overlap? patchA patchB)
@@ -157,6 +163,7 @@
                                  (make-patch 3 DELETE3))
               true)
 
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; Mixed-overlap?: patch patch -> boolean
 ;; Consumes a patch and a patch
 ;; Produces a boolean
@@ -181,6 +188,7 @@
  
 (define DELETE-2 (make-delete 2))
 
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; merge: string patch1 patch2 -> string (or boolean)
 ;; Consumes two patches and a string
 ;; Produces a string of the result, or false if the patches are not compatible
