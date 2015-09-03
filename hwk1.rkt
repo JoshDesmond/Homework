@@ -13,32 +13,43 @@
 ;; Make sure variable names in functions are a-boa
 ;; Include function: num -> string
 ;; Watch the indents
+;; Rename insert example
+;; move delete examples all together, standardize them
+;; rename patch example
  
  
-;; Insert is (make-insert String)
+;; ===============================
+;; ========Data Structures========
+;; ===============================
+;; An insert is (make-insert String)
 ;; An operation that inserts a string at specific location
 (define-struct insert (string))
 (define INSERT-BLAH (make-insert "BLAH"))
-;;template
-;;*?? Do we need a template, it seems too sim
+#| Insert Template
+(define (insert-fun an-insert)
+  ((insert-string an-insert)...))
+|#
  
-;; Delete is (make-delete number)
-;; number of characters deleted at a point
-;; ?? Do we need to specify negative numbers
+;; A delete is (make-delete number)
+;; A type of operation that deletes the number of characters.
+;; number must be greater than or equal to zero.
 (define-struct delete(number))
 (define DELETE-5 (make-delete 5))
 (define DELETE-0 (make-delete 0))
+#| Delete Template
+(define (delete-fun a-delete)
+  ((delete-number a-delete)...))
+|#
  
- 
-;; Operation is either insert or delete
-#|
+;; Operation is either an insert, or a delete
+#| Operation Template
 (define (operation-fun operation)
 (cond [(insert? operation)... insert template here)
       [(delete? operation) ... delete template here)
 |#
  
 ;; A patch is a (make-patch integer operation)
-;; it takes a position to start, and operation done at this position
+;; Specifies an operation, and the location (integer) where the operation is applied.
 (define-struct patch (position operation))
 #|
 (define (patch-fun patch)
@@ -47,15 +58,25 @@
         [(delete? (patch-operation operation)) ...)
 |#
 (define PATCH-EXAMPLE (make-patch 4 INSERT-BLAH))
+;; ===============================
+;; ===============================
+;; ===============================
  
+;; ===============================
+;; ===========Functions===========
+;; ===============================
+;; apply-op: operation string number -> string
 ;; Consumes an operation, a string, and a number
 ;; Produces the resulting string of applying the given operation
 (define (apply-op operation string position)
-  (cond [(insert? operation) (string-append (string-append (substring string 0 position)
-                                                           (insert-string operation))
-
-                                            (substring string position))]
-        [(delete? operation)   (string-append (substring string 0 position) (substring string (+ position (delete-number operation))))]))
+  (cond [(insert? operation) (string-append 
+                              (string-append (substring string 0 position) 
+                                             (insert-string operation)) ;;Append the operation's string to the first splice of the document
+                              (substring string position))] ;; Then append the above to the second splice of the document (or the rest of it)
+        [(delete? operation)   (string-append (substring string 0 position) ;;Append the beginning of the string
+                                              (substring string (+ position ;; To the second splice of the string
+                                                                   (delete-number operation))))]))
+;; Test cases:
 (check-expect (apply-op INSERT-BLAH "abcdefg" 4) "abcdBLAHefg")
 (check-expect (apply-op (make-insert "Dopa") "DopaSeratonin" 4) "DopaDopaSeratonin")
 (check-expect (apply-op DELETE-5 "123456789" 3) "1239")
