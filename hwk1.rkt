@@ -189,7 +189,7 @@ Hamlet: Do you see yonder cloud that's almost in shape of a camel?
 Polonius: By the mass, and 'tis like a camel, indeed.
 [...]
 Hamlet: Or like a whale?
-Polonius: Very like a whale.
+Polonius: Very like a whale. (176 characters)
 
 *** Alternative ***
 Hamlet: Do you see the cloud over there that's almost the shape of a camel?
@@ -201,8 +201,19 @@ Define constants for the patches needed to convert the first quotation to the se
 
  
     back to front, delete before insert where possible 
-last line: delete like, add totally
-           (define patchA (define PATCH1 (make-patch  (make-delete 4)
+(define patch1 (make-patch (- 176 18) (make-delete 4)))
+(define patch2 (make-patch (- 176 14) (make-insert "it's totally")))
+(define patch3 (make-patch (- 176 91) (make-delete 4)))
+(define patch4 (make-patch (- 176 87) (make-insert "it is")))
+(define patch5 (make-patch (- 176 96) (make-delete 4)))
+(define patch6 (make-patch (- 176 102) (make-delete 8)))
+(define patch7 (make-patch (- 176 94) (make-insert "golly")))
+(define patch8 (make-patch (- 176 132) (make-delete 2)))
+(define patch9 (make-patch (- 176 130) (make-insert "the")))
+(define patch10 (make-patch (- 176 147) (make-insert "over there ")))
+(define patch11 (make-patch (- 176 171) (make-delete 6)))
+(define patch12 (make-patch (- 176 165)(make-insert "that")))
+
 
 
 Evaluate each of the following expressions by hand (use the rules covered in class, which match those of Beginner level). Show every step. In each expression, indicate the subexpression that is evaluated to obtain the next expression. For example:
