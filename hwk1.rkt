@@ -21,6 +21,7 @@
 ;; ===============================
 ;; ========Data Structures========
 ;; ===============================
+;; ~~~~~~~~~~~~insert~~~~~~~~~~~~~~~~~~
 ;; An insert is (make-insert String)
 ;; An operation that inserts a string at specific location
 (define-struct insert (string))
@@ -30,6 +31,7 @@
   ((insert-string an-insert)...))
 |#
  
+;; ~~~~~~~~~~~delete~~~~~~~~~~~~~
 ;; A delete is (make-delete number)
 ;; A type of operation that deletes the number of characters.
 ;; number must be greater than or equal to zero.
@@ -40,7 +42,8 @@
 (define (delete-fun a-delete)
   ((delete-number a-delete)...))
 |#
- 
+
+;; ~~~~~~~~~~~operation~~~~~~~~~~~~~~~
 ;; Operation is either an insert, or a delete
 #| Operation Template
 (define (operation-fun operation)
@@ -48,6 +51,7 @@
       [(delete? operation) ... delete template here)
 |#
  
+;; ~~~~~~~~~~~~~~~patch~~~~~~~~~~~~~~~~
 ;; A patch is a (make-patch integer operation)
 ;; Specifies an operation, and the location (integer) where the operation is applied.
 (define-struct patch (position operation))
@@ -58,16 +62,13 @@
         [(delete? (patch-operation operation)) ...)
 |#
 (define PATCH-EXAMPLE (make-patch 4 INSERT-BLAH))
-;; ===============================
-;; ===============================
-;; ===============================
  
 
 
 ;; ===============================
 ;; ===========Functions===========
 ;; ===============================
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;; ~~~~~~~~~apply-op~~~~~~~~~~~~~~
 ;; apply-op: operation string number -> string
 ;; Consumes an operation, a string, and a number
 ;; Produces the resulting string of applying the given operation
@@ -84,7 +85,7 @@
 (check-expect (apply-op (make-insert "Dopa") "DopaSeratonin" 4) "DopaDopaSeratonin")
 (check-expect (apply-op DELETE-5 "123456789" 3) "1239")
  
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;; ~~~~~~~~~~apply-patch~~~~~~~~~~~~~~
 ;; apply-patch: patch string -> string
 ;; Consumes a patch and a string
 ;; Produces the string resulting from applying the patch to the string
@@ -95,8 +96,8 @@
 ;; apply-patch: Test Cases
 (check-expect (apply-patch PATCH-EXAMPLE "123456789") "1234BLAH56789")
 
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Overlap?: patch patch -> boolean
+;; ~~~~~~~~~overlap?~~~~~~~~~~~~~~~~
+;; overlap?: patch patch -> boolean
 ;; consumes 2 patches and determines if they overlap
 (define (overlap? patchA patchB)
   (cond [(and (insert? (patch-operation patchA))
@@ -114,10 +115,9 @@
 (check-expect (overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 INSERT-BLAH)) true)
 
 
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Insertions-overlap?: patch patch -> boolean
+;; ~~~~~~~~~~insertions-overlap?~~~~~~~~~~~~~~~~
+;; insertions-overlap?: patch patch -> boolean
 ;; Both patches must have insertions as operations determines if they overlap 
-(patch-position PATCH-EXAMPLE)
 (define (insertion-overlap? patchA patchB)
   (= (patch-position patchA)
      (patch-position patchB)))
@@ -130,7 +130,7 @@
                                   (make-patch 0 INSERT-BLAH )) false)
 
 
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;; ~~~~~~~~~~getRight~~~~~~~~~~~~~
 ;; getRight: patch (deletion) -> num
 ;; gets a deletion patch and determines right bound of range
 (define (getRight a-patch)
@@ -139,32 +139,31 @@
 ;; getRight: Test Cases
 (check-expect (getRight (make-patch 4 (make-delete 3))) 7)
 
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Deletion-overlap?: patch patch -> boolean
+;; ~~~~~~~~~~~deletion-overlap?~~~~~~~~~~~~
+;; deletion-overlap?: patch patch -> boolean
 ;; both patches myust have deletions as operations, determines if these overlap
 (define (deletion-overlap? patchA patchB)
-
-  (  and (<= (patch-position patchA) (getRight patchB))
+  (and (<= (patch-position patchA) (getRight patchB))
           (>= (getRight patchA) (patch-position patchB))))
-                                       
-     (define DELETE3 (make-delete 3))
+    
+;; delete-overlap?: Test Cases
+(define DELETE3 (make-delete 3))
 
-     (check-expect (deletion-overlap? (make-patch 5 DELETE3)
-                                      (make-patch 0 DELETE3))
-                   false)
-     (check-expect (deletion-overlap? (make-patch 0 DELETE3)
-                                      (make-patch 0 DELETE3))
-                   true)
-     (check-expect (deletion-overlap? (make-patch 2 DELETE3)
-                                      (make-patch 0 DELETE3))
-                   true)
-
+(check-expect (deletion-overlap? (make-patch 5 DELETE3)
+                                 (make-patch 0 DELETE3))
+              false)
+(check-expect (deletion-overlap? (make-patch 0 DELETE3)
+                                 (make-patch 0 DELETE3))
+              true)
+(check-expect (deletion-overlap? (make-patch 2 DELETE3)
+                                 (make-patch 0 DELETE3))
+              true)
 (check-expect (deletion-overlap? (make-patch 0 DELETE3)
                                  (make-patch 3 DELETE3))
               true)
 
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Mixed-overlap?: patch patch -> boolean
+;; ~~~~~~~~~~~mixed-overlap?~~~~~~~~~~~~~~~
+;; mixed-overlap?: patch patch -> boolean
 ;; Consumes a patch and a patch
 ;; Produces a boolean
 ;; Determines if the two given patches are compatible or if they overlap.
@@ -175,6 +174,7 @@
         [else (cond [(<= (patch-position patchA) (patch-position patchB)) false]
                     [else (< (patch-position patchA) (getRight patchB))])]))
  
+;; mixed-overlap?: Test Cases
 ;; Test one, insertion is before deletion -> false
 (check-expect (mixed-overlap? (make-patch 0 INSERT-BLAH) (make-patch 2 DELETE-2)) false)
 ;; Test two, insertion is in the middle of deletion -> true
@@ -197,7 +197,7 @@
         [else (cond [(> (patch-position patch1) (patch-position patch2)) (merge doc-string patch2 patch1)]
                     [else (apply-patch patch1 (apply-patch patch2 doc-string))])]))
 
-;; Test Cases
+;; merge: Test Cases
 (define TEST-DOC "abcdefg")
 (define DEL-efg (make-patch 4 DELETE3))
 (define DEL-bcd (make-patch 1 DELETE3))
@@ -221,8 +221,14 @@
 ;; Test case 9, unsuccessful merge, delete cdef, delete bc
 (check-expect (merge TEST-DOC (make-patch 3 DELETE3)(make-patch 2 (make-delete 2))) false)
 
-    
-     
+
+
+
+
+
+;; ===============================
+;; =======Homework Problems=======
+;; ===============================
      #| Question 6.)
 In the previous question, we returned false in the event of an overlap.
 Another option might have been to just return the original (unmerged)
