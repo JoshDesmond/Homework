@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -134,7 +134,7 @@
 
 (check-expect (deletion-overlap? (make-patch 0 DELETE3)
                                  (make-patch 3 DELETE3))
-              false)
+              true)
 
 ;; Mixed-overlap?: patch patch -> boolean
 ;; Consumes a patch and a patch
@@ -204,11 +204,25 @@ string in the event of overlap?
 Also, the false that is returned in by the overlap? more clearly answers the question "do these two patches conflict" than the returning the original string
  
 |#
+;; replace 176 with current string length
+(define patch1 (make-patch (- 176 18) (make-delete 4)))
+(define patch2 (make-patch (- 172 14) (make-insert "it's totally")))
+(define patch3 (make-patch (- 184 91) (make-delete 4)))
+(define patch4 (make-patch (- 180 87) (make-insert "it is")))
+(define patch5 (make-patch (- 185 96) (make-delete 4)))
+(define patch6 (make-patch (- 181 102) (make-delete 8)))
+(define patch7 (make-patch (- 173 94) (make-insert "golly")))
+(define patch8 (make-patch (- 178 132) (make-delete 2)))
+(define patch9 (make-patch (- 176 130) (make-insert "the")))
+(define patch10 (make-patch (- 179 147) (make-insert "over there ")))
+(define patch11 (make-patch (- 190 171) (make-delete 6)))
+(define patch12 (make-patch (- 184 165)(make-insert "that")))
 
+(define original "Hamlet: Do you see yonder cloud that's almost in shape of a camel?Polonius: By the mass, and 'tis like a camel, indeed.[...]Hamlet: Or like a whale?Polonius: Very like a whale.")
 
-
-
-
+(define alternative "Hamlet: Do you see the cloud over there that's almost the shape of a camel?Polonius: By golly, it is like a camel, indeed.[...]Hamlet: Or like a whale?Polonius: It's totally like a whale.")
+original
+(apply-patch patch2(apply-patch patch1 original))
 
 #|
 
