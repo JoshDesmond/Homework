@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -170,13 +170,43 @@ In the previous question, we returned false in the event of an overlap.
 Another option might have been to just return the original (unmerged)
 string. What are the advantages of returning false instead of the original
 string in the event of overlap?
- 
+
+ Returning false is useful tactic because it allows the user of the program to clearly know that something did not work with the patches they attempted to apply.
+Also, the false that is returned in by the overlap? more clearly answers the question "do these two patches conflict" than the returning the original string
  
 |#
 
-     
-     
-     #|
+
+
+
+
+
+#|
+
+Question 7. 
+Consider the following quotation from Hamlet and an alternative in more modern English:
+
+*** Original ***
+Hamlet: Do you see yonder cloud that's almost in shape of a camel?
+Polonius: By the mass, and 'tis like a camel, indeed.
+[...]
+Hamlet: Or like a whale?
+Polonius: Very like a whale.
+
+*** Alternative ***
+Hamlet: Do you see the cloud over there that's almost the shape of a camel?
+Polonius: By golly, it is like a camel, indeed.
+[...]
+Hamlet: Or like a whale?
+Polonius: It's totally like a whale.
+Define constants for the patches needed to convert the first quotation to the second. Treat each of the two quotations as a single string (you do not need to capture the newlines). Then write a function modernize that consumes a string and applies all of those patches to the string. Test your function on the original Hamlet excerpt. [Acknowledgement: This example is a subset of the one in Neil Fraser's explanation of the patch utility.]
+
+ 
+    back to front, delete before insert where possible 
+last line: delete like, add totally
+           (define patchA (define PATCH1 (make-patch  (make-delete 4)
+
+
 Evaluate each of the following expressions by hand (use the rules covered in class, which match those of Beginner level). Show every step. In each expression, indicate the subexpression that is evaluated to obtain the next expression. For example:
         (sqrt (+ (* 3 3) (* 4 4)))
                  ^^^^^^^
