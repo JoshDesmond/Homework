@@ -16,6 +16,9 @@
 ;; Rename insert example
 ;; move delete examples all together, standardize them
 ;; rename patch example
+;; More test cases required for insertions-overlap?
+;; More test cases for getRight
+;; rename getRight (?) (doesn't really matter)
  
  
 ;; ===============================
@@ -117,7 +120,9 @@
 
 ;; ~~~~~~~~~~insertions-overlap?~~~~~~~~~~~~~~~~
 ;; insertions-overlap?: patch patch -> boolean
-;; Both patches must have insertions as operations determines if they overlap 
+;; Consumes two patches with insertions as its operation
+;; Produces a boolean indicating whether patchA and patchB overlap
+;; Both patches must have insertions as operations
 (define (insertion-overlap? patchA patchB)
   (= (patch-position patchA)
      (patch-position patchB)))
@@ -125,14 +130,16 @@
 ;; Insertions-overlap?: Test Cases
 (check-expect (insertion-overlap? (make-patch 4 INSERT-BLAH)
                                   (make-patch 4 INSERT-BLAH )) true)
-
 (check-expect (insertion-overlap? (make-patch 8 INSERT-BLAH)
                                   (make-patch 0 INSERT-BLAH )) false)
 
 
+
 ;; ~~~~~~~~~~getRight~~~~~~~~~~~~~
-;; getRight: patch (deletion) -> num
-;; gets a deletion patch and determines right bound of range
+;; getRight: patch -> number
+;; Consumes a patch with deletion as its operation
+;; Returns the position where the deletion ends
+;; a-patch must have a deletion as its operation.
 (define (getRight a-patch)
   (+ (delete-number(patch-operation a-patch))
      (patch-position a-patch)))
@@ -141,14 +148,13 @@
 
 ;; ~~~~~~~~~~~deletion-overlap?~~~~~~~~~~~~
 ;; deletion-overlap?: patch patch -> boolean
-;; both patches myust have deletions as operations, determines if these overlap
+;; both patches must have deletions as operations, determines if these overlap
 (define (deletion-overlap? patchA patchB)
   (and (<= (patch-position patchA) (getRight patchB))
           (>= (getRight patchA) (patch-position patchB))))
     
 ;; delete-overlap?: Test Cases
 (define DELETE3 (make-delete 3))
-
 (check-expect (deletion-overlap? (make-patch 5 DELETE3)
                                  (make-patch 0 DELETE3))
               false)
@@ -160,7 +166,10 @@
               true)
 (check-expect (deletion-overlap? (make-patch 0 DELETE3)
                                  (make-patch 3 DELETE3))
-              true)
+              false)
+(check-expect (deletion-overlap? (make-patch 3 DELETE3)
+                                 (make-patch 0 DELETE3))
+              false)
 
 ;; ~~~~~~~~~~~mixed-overlap?~~~~~~~~~~~~~~~
 ;; mixed-overlap?: patch patch -> boolean
@@ -188,7 +197,7 @@
  
 (define DELETE-2 (make-delete 2))
 
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;; ~~~~~~~~~~~~merge~~~~~~~~~~~
 ;; merge: string patch1 patch2 -> string (or boolean)
 ;; Consumes two patches and a string
 ;; Produces a string of the result, or false if the patches are not compatible
