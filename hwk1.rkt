@@ -284,6 +284,7 @@
             (delete? (patch-operation patch1))) ;; and patch 1 is a deletion
        (insert? (patch-operation patch2)))) ;; and patch2 is an insertion )
 
+;; Test cases not written because this is a refactored helper function that is tested within "merge" 
 
 ;; ===============================
 ;; =======Homework Problems=======
