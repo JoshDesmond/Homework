@@ -237,12 +237,17 @@
 ;; Produces a string of the result, or false if the patches are not compatible
 ;; This function takes the two given patches and applies them to a document
 ;; The order of the given patches will not effect output, i.e: (merge "s" a b) = (merge "s" b a)
+;; If a deletion and insertion are applied at the same location, deletion will be applied first
 (define (merge doc-string patch1 patch2)
   (cond [(overlap? patch1 patch2) false] ;; return false if the patches overlap
         [(not (overlap? patch1 patch2)) 
          (cond [(> (patch-position patch1) (patch-position patch2)) ;; if the patches are in the wrong order
                 (merge doc-string patch2 patch1)] ;; then call merge with the patches in fliped position
-               [else (apply-patch patch1 (apply-patch patch2 doc-string))])])) ;; otherwise, apply both patches
+               [(and (and (= (patch-position patch1) (patch-position patch2)) ;; if the patches are at the same position
+                          (delete? (patch-operation patch1))) ;; and patch 1 is a deletion
+                     (insert? (patch-operation patch2))) ;; and patch2 is an insertion  
+                (merge doc-string patch2 patch1)] ;; then merge the two patches in reverse order     
+               [else (apply-patch patch1 (apply-patch patch2 doc-string))])]))  ;; otherwise, apply both patches
 
 ;; merge: Test Cases
 (define TEST-DOC "abcdefg")
@@ -264,9 +269,13 @@
 ;; Test case 7, successful insert x at b, insert x at g
 (check-expect (merge TEST-DOC (make-patch 2 INS-x) (make-patch 7 INS-x)) "abxcdefgx")
 ;; Test case 8, unsuccessful merge, delete efg, delete g
-;;(check-expect (merge TEST-DOC DEL-efg (make-patch 7 (make-delete 1))) false)
+(check-expect (merge TEST-DOC DEL-efg (make-patch 6 (make-delete 1))) false)
 ;; Test case 9, unsuccessful merge, delete cdef, delete bc
 (check-expect (merge TEST-DOC (make-patch 3 DELETE3)(make-patch 2 (make-delete 2))) false)
+;; Test case 10, successful merge, deletion and insertion at same position
+(check-expect (merge TEST-DOC (make-patch 3 DELETE3) (make-patch 3 INS-x)) "abcxg")
+;; Test case 11, successful merge, insertion and deletion at same position
+(check-expect (merge TEST-DOC (make-patch 3 INS-x) (make-patch 3 DELETE3)) "abcxg")
 
 
 
