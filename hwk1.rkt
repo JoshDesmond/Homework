@@ -243,11 +243,9 @@
         [(not (overlap? patch1 patch2)) 
          (cond [(> (patch-position patch1) (patch-position patch2)) ;; if the patches are in the wrong order
                 (merge doc-string patch2 patch1)] ;; then call merge with the patches in fliped position
-               [(and (and (= (patch-position patch1) (patch-position patch2)) ;; if the patches are at the same position
-                          (delete? (patch-operation patch1))) ;; and patch 1 is a deletion
-                     (insert? (patch-operation patch2))) ;; and patch2 is an insertion  
+               [(overlap-insert-then-delete? patch1 patch2) ;; in this special case
                 (merge doc-string patch2 patch1)] ;; then merge the two patches in reverse order     
-               [else (apply-patch patch1 (apply-patch patch2 doc-string))])]))  ;; otherwise, apply both patches
+               [else (apply-patch patch1 (apply-patch patch2 doc-string))])])) ;; otherwise, apply both patches
 
 ;; merge: Test Cases
 (define TEST-DOC "abcdefg")
@@ -278,8 +276,13 @@
 (check-expect (merge TEST-DOC (make-patch 3 INS-x) (make-patch 3 DELETE3)) "abcxg")
 
 
-
-
+;; overlap-insert-then-delete?: patch patch -> boolean
+;; helper function for merge
+;; Returns true if patch1 is an insert, and patch2 is a delete, and both patches start at the same position
+(define (overlap-insert-then-delete? patch1 patch2)
+  (and (and (= (patch-position patch1) (patch-position patch2)) ;; if the patches are at the same position
+            (delete? (patch-operation patch1))) ;; and patch 1 is a deletion
+       (insert? (patch-operation patch2)))) ;; and patch2 is an insertion )
 
 
 ;; ===============================
