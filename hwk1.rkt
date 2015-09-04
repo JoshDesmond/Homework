@@ -1,6 +1,10 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+;; Josh Desmond
+;; Saahil Claypool
+
+
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -8,17 +12,6 @@
 ;; http://web.cs.wpi.edu/~cs1102/a15/Assignments/Hwk1/index.html
 ;; Homework Guidelines:
 ;; http://web.cs.wpi.edu/~cs1102/a15/Assignments/grading-general.html
- 
-;; TODOLIST:
-;; Make sure variable names in functions are a-boa
-;; Include function: num -> string
-;; Watch the indents
-;; Rename insert example
-;; move delete examples all together, standardize them
-;; rename patch example
-;; More test cases required for insertions-overlap?
-;; More test cases for getRight
-;; rename getRight (?) (doesn't really matter)
  
  
 ;; ===============================
@@ -410,173 +403,13 @@ error: "and: question result is not true or false: 4"
 ~~~~~~~
 11: (apply-patch 'remove "this is a test string") [use your own apply-patch program from this assignment]
 
-
-(define removeExampple (make-patch 3 (make-delete 2))'
-
- (apply-patch remove "this is a test string")
-
-1. (apply-patch removeExample "this is a test string")
-               ^^^^^^^^^^^^
-2. (apply-patch (make-patch 3 (make-delete 2)) "this is a test string")
-    ^^^^^^^^^^
-3. (apply-op(patch-operation(make-patch3(make-delete 2))) "this is a test string" (patch-position(make-patch3 (make-delete 2))))
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-4. (apply-op(make-delete 2)) "this is a test string" (patch-position(make-patch 3 (make-delete 2)))) 
-                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5. (apply-op(make-delete 2)) "this is a test string" 3 ))) 
-   ^^^^^^^^^
-
-6. (cond
- ((insert? (make-delete 2))
-   ^^^^^^^^^^^^^^^^^^^^^^^^
-  (string-append
-   (string-append
-    (substring
-     "this is a test string"
-     0
-     3)
-    (insert-string
-     (make-delete 2)))
-   (substring
-    "this is a test string"
-    3)))
- ((delete? (make-delete 2))
-  (string-append
-   (substring
-    "this is a test string"
-    0
-    3)
-   (substring
-    "this is a test string"
-    (+
-     3
-     (delete-number
-      (make-delete 2)))))))
-7. (cond
- ( false )
-^^^^^^^^^^^^^^^^^
-  (string-append
-^^^^^^^^^^^^^^^^^^^
-   (string-append
-^^^^^^^^^^^^^^^^^^^
-    (substring
-^^^^^^^^^^^^^^^^^
-     "this is a test string"
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-     0
-^^^^^^^^^^^
-     3)
-^^^^^^^^^^
-    (insert-string
-^^^^^^^^^^^^^^^^^^^
-     (make-delete 2)))
-^^^^^^^^^^^^^^^^^^^^
-   (substring
-^^^^^^^^^^^^^^^^
-    "this is a test string"
-^^^^^^^^^^^^^^^^^^^^^^^^^
-    3)))
-^^^^^^^^^^^^^^^^
- ((delete? (make-delete 2))
-  (string-append
-   (substring
-    "this is a test string"
-    0
-    3)
-   (substring
-    "this is a test string"
-    (+
-     3
-     (delete-number
-      (make-delete 2)))))))
-
-8. (cond
- ((delete? (make-delete 2))
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  (string-append
-   (substring
-    "this is a test string"
-    0
-    3)
-   (substring
-    "this is a test string"
-    (+
-     3
-     (delete-number
-      (make-delete 2)))))))
-9. (cond
-^^^^^^^^^
- (true)
-^^^^^^^^^^
-  (string-append
-   (substring
-    "this is a test string"
-    0
-    3)
-   (substring
-    "this is a test string"
-    (+
-     3
-     (delete-number
-      (make-delete 2)))))))
-10. (string-append
-   (substring
-    ^^^^^^^^^^^^^^^^
-    "this is a test string"
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    0
-^^^^^^^^
-    3)
-^^^^^^^^^^
-   (substring
-    "this is a test string"
-    (+
-     3
-     (delete-number
-      (make-delete 2)))))))
-11. (string-append
-   "thi"
-   (substring
-    "this is a test string"
-    (+
-     3
-     (delete-number
-^^^^^^^^^^^^^^^^^^^^
-      (make-delete 2)))))))
-       ^^^^^^^^^^^^^
-12. (string-append
-   "thi"
-   (substring
-    "this is a test string"
-    (+
-     3
-     2 )))
-13. (string-append
-   "thi"
-   (substring
-    "this is a test string"
-    (+
-    ^^^
-     3
-    ^^^
-     2 )))
-    ^^^^
-14. (string-append
-   "thi"
-   (substring
- ^^^^^^^^^^^^^^
-    "this is a test string"
-^^^^^^^^^^^^^^^^^^^^^^^^^
-    5))
-^^^^^
-15. (string-append
-   "thi"
-  "is a test string")
-16.  "thiis a test string"        
-
-                                                
-Saa
+(apply-patch 'remove "this is a test string")
+ ^^^^^^^^^^^
+(apply-op (patch-operation 'remove) "this is a test string" (patch-position 'remove)))
+           ^^^^^^^^^^^^^^^^^^^^^^^
+Error: patch-operation: contract violation 
+expected: patch
+  given: 'remove
 
 
 =====Debugging Racket Programs=====
@@ -600,4 +433,3 @@ This error message will appear when a number is wrapped around parenthesis. In t
 
 |#
 
-(apply-patch 'remove "this is a test string")
