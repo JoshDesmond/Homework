@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -26,9 +26,11 @@
 ;; ===============================
 ;; ~~~~~~~~~~~~insert~~~~~~~~~~~~~~~~~~
 ;; An insert is (make-insert String)
-;; An operation that inserts a string at specific location
+;; An insert is a type of operation (see "operation" data structure)
+;; which specifies to insert the given string.
 (define-struct insert (string))
 (define INSERT-BLAH (make-insert "BLAH"))
+(define INSERT-HELLO (make-insert "HELLO"))
 #| Insert Template
 (define (insert-fun an-insert)
   ((insert-string an-insert)...))
@@ -36,8 +38,9 @@
  
 ;; ~~~~~~~~~~~delete~~~~~~~~~~~~~
 ;; A delete is (make-delete number)
-;; A type of operation that deletes the number of characters.
+;; A delete is a type of operation that deletes the specified number of characters.
 ;; number must be greater than or equal to zero.
+;; number specifies the number of characters to delete (with 0 deleting no characters).
 (define-struct delete(number))
 (define DELETE-5 (make-delete 5))
 (define DELETE-0 (make-delete 0))
@@ -58,6 +61,8 @@
 ;; ~~~~~~~~~~~~~~~patch~~~~~~~~~~~~~~~~
 ;; A patch is a (make-patch integer operation)
 ;; Specifies an operation, and the location (integer) where the operation is applied.
+;; position specifies the location in the document where the given operation will occur.
+;; position 0 would specify to insert text before any characters, or to delete the first character.
 (define-struct patch (position operation))
 #|
 (define (patch-fun patch)
@@ -66,6 +71,8 @@
         [(delete? (patch-operation operation)) ...)
 |#
 (define PATCH-EXAMPLE (make-patch 4 INSERT-BLAH))
+(define PATCH-APPEND-X (make-patch 0 (make-insert "x")))
+(define PATCH-DELETION (make-patch 3 (make-delete 4)))
  
 
 
@@ -76,6 +83,10 @@
 ;; apply-op: operation string number -> string
 ;; Consumes an operation, a string, and a number
 ;; Produces the resulting string of applying the given operation
+;; Where string is the document to which the operation is being applied
+;; position is the location where the operation which be applied 
+;;  (such that 0 specifies to delete the first character, or append to the beggining of the string)
+;; operation is the operation to be applied.
 (define (apply-op operation string position)
   (cond [(insert? operation) (string-append 
                               (string-append (substring string 0 position) 
@@ -88,12 +99,16 @@
 (check-expect (apply-op INSERT-BLAH "abcdefg" 4) "abcdBLAHefg")
 (check-expect (apply-op (make-insert "Dopa") "DopaSeratonin" 4) "DopaDopaSeratonin")
 (check-expect (apply-op DELETE-5 "123456789" 3) "1239")
+;; (Note: More complete testing is covered by "apply-patch")
+
  
 ;; ~~~~~~~~~~apply-patch~~~~~~~~~~~~~~
 ;; apply-patch: patch string -> string
 ;; Consumes a patch and a string
 ;; Produces the string resulting from applying the patch to the string
-;; Assumes given string is long enough for the patch
+;; Where string is the document to which the patch is being applied
+;; and patch is any patch
+;; Assumes the given string is long enough for the patch
 (define (apply-patch a-patch string)
   (apply-op (patch-operation a-patch) string (patch-position a-patch)))
  
@@ -104,10 +119,20 @@
 (check-expect (apply-patch (make-patch 3 DELETE-5) "abcdefgh") "abc")
 ;; Test 3, apply an empty deletion
 (check-expect (apply-patch (make-patch 2 DELETE-0) "abcd") "abcd")
+;; Test 4, append x to beginning
+(check-expect (apply-patch PATCH-APPEND-X "abcde") "xabcde")
+;; Test 5, delete the first character
+(check-expect (apply-patch (make-patch 0 (make-delete 1)) "abcd") "bcd")
 
 ;; ~~~~~~~~~overlap?~~~~~~~~~~~~~~~~
 ;; overlap?: patch patch -> boolean
-;; consumes 2 patches and determines if they overlap
+;; consumes two patches
+;; produces a boolean determing whether the patches overlap
+;; returns true if they do overlap (or if the patches can't be merged)
+;; Two patches overlap if:
+;;  - Two insertions occur at the same location
+;;  - The range of two deletions overlap
+;;  - If an insertion occurs within the range of a deletion
 (define (overlap? patchA patchB)
   (cond [(and (insert? (patch-operation patchA)) ;; If they are both inserts
               (insert? (patch-operation patchB)))
@@ -150,7 +175,8 @@
 
 ;; ~~~~~~~~~~~deletion-overlap?~~~~~~~~~~~~
 ;; deletion-overlap?: patch patch -> boolean
-;; both patches must have deletions as operations, determines if these overlap
+;; both patches must have deletions as operations
+;; returns true if the patches overlap
 (define (deletion-overlap? patchA patchB)
   (and (< (patch-position patchA) (getRight patchB))
           (> (getRight patchA) (patch-position patchB))))
@@ -158,23 +184,17 @@
 ;; delete-overlap?: Test Cases
 (define DELETE3 (make-delete 3))
 (check-expect (deletion-overlap? (make-patch 5 DELETE3)
-                                 (make-patch 0 DELETE3))
-              false)
+                                 (make-patch 0 DELETE3)) false)
 (check-expect (deletion-overlap? (make-patch 0 DELETE3)
-                                 (make-patch 0 DELETE3))
-              true)
+                                 (make-patch 0 DELETE3)) true)
 (check-expect (deletion-overlap? (make-patch 2 DELETE3)
-                                 (make-patch 0 DELETE3))
-              true)
+                                 (make-patch 0 DELETE3)) true)
 (check-expect (deletion-overlap? (make-patch 0 DELETE3)
-                                 (make-patch 3 DELETE3))
-              false)
+                                 (make-patch 3 DELETE3)) false)
 (check-expect (deletion-overlap? (make-patch 3 DELETE3)
-                                 (make-patch 0 DELETE3))
-              false)
+                                 (make-patch 0 DELETE3)) false)
 (check-expect (deletion-overlap? (make-patch 0 DELETE-0)
-                                 (make-patch 0 DELETE-0))
-              false)
+                                 (make-patch 0 DELETE-0)) false)
 
 
 ;; ~~~~~~~~~~getRight~~~~~~~~~~~~~
@@ -195,11 +215,13 @@
 ;; Consumes a patch and a patch
 ;; Produces a boolean
 ;; Determines if the two given patches are compatible or if they overlap.
-;; patches must be of mixed type. The order of the type does not matter
+;; Returns true if the patches overlap.
+;; One patch must be have insert as its operation, and the other must have
+;; a delete as its operation. The order of the type does not matter
 (define (mixed-overlap? patchA patchB)
   (cond [(delete? (patch-operation patchA))
-         (mixed-overlap? patchB patchA)]
-        [else (cond [(<= (patch-position patchA) (patch-position patchB)) false]
+         (mixed-overlap? patchB patchA)] ;; Recursively call self with flipped inputs.
+        [(delete? (patch-operation patchB)) (cond [(<= (patch-position patchA) (patch-position patchB)) false]
                     [else (< (patch-position patchA) (getRight patchB))])]))
  
 ;; mixed-overlap?: Test Cases
@@ -217,13 +239,17 @@
 (check-expect (mixed-overlap? (make-patch 4 INSERT-BLAH) (make-patch 4 DELETE-0)) false)
 
 ;; ~~~~~~~~~~~~merge~~~~~~~~~~~
-;; merge: string patch1 patch2 -> string (or boolean)
+;; merge: string patch patch -> string, or a boolean
 ;; Consumes two patches and a string
 ;; Produces a string of the result, or false if the patches are not compatible
+;; This function takes the two given patches and applies them to a document
+;; The order of the given patches will not effect output, i.e: (merge "s" a b) = (merge "s" b a)
 (define (merge doc-string patch1 patch2)
-  (cond [(overlap? patch1 patch2) false]
-        [else (cond [(> (patch-position patch1) (patch-position patch2)) (merge doc-string patch2 patch1)]
-                    [else (apply-patch patch1 (apply-patch patch2 doc-string))])]))
+  (cond [(overlap? patch1 patch2) false] ;; return false if the patches overlap
+        [(not (overlap? patch1 patch2)) 
+         (cond [(> (patch-position patch1) (patch-position patch2)) ;; if the patches are in the wrong order
+                (merge doc-string patch2 patch1)] ;; then call merge with the patches in fliped position
+               [else (apply-patch patch1 (apply-patch patch2 doc-string))])])) ;; otherwise, apply both patches
 
 ;; merge: Test Cases
 (define TEST-DOC "abcdefg")
@@ -292,11 +318,7 @@ Also, the false that is returned in by the overlap? more clearly answers the que
 (define (modernize original)
  (apply-patch patch12 (apply-patch patch11 (apply-patch patch10 (apply-patch patch9 (apply-patch patch8 (apply-patch patch7 (apply-patch patch6 (apply-patch patch5 (apply-patch patch4 (apply-patch patch3 (apply-patch patch2 (apply-patch patch1 original)))))))))))))
 
-
-
-
-
-                                                                                                                                    
+                                       
 
 #|
 
@@ -577,3 +599,5 @@ Code: (+ (+ 1 2) (3))
 This error message will appear when a number is wrapped around parenthesis. In the above example, "(3)" is causing the error.
 
 |#
+
+(apply-patch 'remove "this is a test string")
