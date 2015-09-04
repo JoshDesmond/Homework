@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname hwk1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 ;; =====Homework Assigment 1=====
 ;; Josh Desmond & Saahil Claypool
 ;; ==============================
@@ -284,7 +284,7 @@ Also, the false that is returned in by the overlap? more clearly answers the que
 (define original "Hamlet: Do you see yonder cloud that's almost in shape of a camel?Polonius: By the mass, and 'tis like a camel, indeed.[...]Hamlet: Or like a whale?Polonius: Very like a whale.")
 
 (define alternative "Hamlet: Do you see the cloud over there that's almost the shape of a camel?Polonius: By golly, it is like a camel, indeed.[...]Hamlet: Or like a whale?Polonius: It's totally like a whale.")
-original
+
 
 ;; modernize: string -> string
 ;; takes a string from hamlet and applies all the patches needed to modernize it
@@ -296,7 +296,7 @@ original
 
 
 
-                                                                                                                                      (apply-patch patch6(apply-patch patch5(apply-patch patch4(apply-patch patch3(apply-patch patch2(apply-patch patch1 original))))))
+                                                                                                                                    
 
 #|
 
@@ -387,6 +387,10 @@ error: "and: question result is not true or false: 4"
 
 ~~~~~~~
 11: (apply-patch 'remove "this is a test string") [use your own apply-patch program from this assignment]
+
+
+(define removeExampple (make-patch 3 (make-delete 2))'
+
  (apply-patch remove "this is a test string")
 
 1. (apply-patch removeExample "this is a test string")
