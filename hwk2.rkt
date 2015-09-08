@@ -1,7 +1,7 @@
 #reader(lib"read.ss""wxme")WXME0108 ## 
 #|
    This file uses the GRacket editor format.
-   Open this file in DrRacket version 6.2.1 or later to read it.
+   Open this file in DrRacket version 6.1.1 or later to read it.
 
    Most likely, it was created by saving a program in DrRacket,
    and it probably contains a program with non-text elements
@@ -9,7 +9,7 @@
 
             http://racket-lang.org/
 |#
- 32 7 #"wxtext\0"
+ 31 7 #"wxtext\0"
 3 1 6 #"wxtab\0"
 1 1 8 #"wximage\0"
 2 0 8 #"wxmedia\0"
@@ -29,11 +29,7 @@
  #"((lib \"image-core.ss\" \"mrlib\") (lib \"image-core-wxme.rkt\" \"mr"
  #"lib\"))\0"
 ) 1 0 29 #"drscheme:bindings-snipclass%\0"
-1 0 101
-(
- #"((lib \"ellipsis-snip.rkt\" \"drracket\" \"private\") (lib \"ellipsi"
- #"s-snip-wxme.rkt\" \"drracket\" \"private\"))\0"
-) 2 0 88
+1 0 88
 (
  #"((lib \"pict-snip.rkt\" \"drracket\" \"private\") (lib \"pict-snip.r"
  #"kt\" \"drracket\" \"private\"))\0"
@@ -55,12 +51,12 @@
 1 0 10 #"text-box%\0"
 1 0 32 #"(lib \"text-snipclass.ss\" \"xml\")\0"
 1 0 1 6 #"wxloc\0"
-          0 0 73 0 1 #"\0"
+          0 0 74 0 1 #"\0"
 0 75 1 #"\0"
 0 10 90 -1 90 -1 3 -1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 255 255 255 1 -1 0 9
 #"Standard\0"
 0 75 12 #"Courier New\0"
-0 14 90 -1 90 -1 3 -1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 255 255 255 1 -1 2 1
+0 10 90 -1 90 -1 3 -1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 255 255 255 1 -1 2 1
 #"\0"
 0 -1 1 #"\0"
 1 0 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 -1 -1 2 24
@@ -207,7 +203,7 @@
 1 0 -1 92 -1 93 -1 -1 0 1 0 0 0 1 0 0 0 0 0 0 255 165 0 0 0 0 -1 -1 0 1
 #"\0"
 0 75 12 #"Courier New\0"
-0.0 13 90 -1 90 -1 3 -1 0 1 0 1 0 0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
+0.0 14 90 -1 90 -1 3 -1 0 1 0 1 0 0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
 255 255 1 -1 2 1 #"\0"
 0 -1 1 #"\0"
 1.0 0 -1 -1 -1 -1 -1 -1 0 0 0 0 0 1 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
@@ -224,6 +220,9 @@
 0 -1 1 #"\0"
 1.0 0 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0.0 0.0 0.0 1.0 1.0 1.0 0 0 0 0 0 0
 -1 -1 0 1 #"\0"
+0 75 12 #"Courier New\0"
+0.0 13 90 -1 90 -1 3 -1 0 1 0 1 0 0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
+255 255 1 -1 0 1 #"\0"
 0 75 12 #"Courier New\0"
 0.0 10 90 -1 90 -1 3 -1 0 1 0 1 0 0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
 255 255 1 -1 4 1 #"\0"
@@ -264,14 +263,14 @@
 1.0 0 -1 -1 -1 -1 -1 -1 0 0 0 0 1 0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
 255 255 -1 -1 0 1 #"\0"
 0 -1 1 #"\0"
-0 12 -1 -1 -1 -1 -1 -1 0 0 1 0 0 0 1.0 1.0 1.0 1.0 1.0 1.0 0 0 0 0 0 0
+0.0 12 -1 -1 -1 -1 -1 -1 0 0 1 0 0 0 1.0 1.0 1.0 1.0 1.0 1.0 0 0 0 0 0 0
 -1 -1 2 1 #"\0"
 0 -1 1 #"\0"
-0 12 -1 -1 -1 -1 -1 -1 0 0 1 0 0 0 1.0 1.0 1.0 1.0 1.0 1.0 0 0 0 0 0 0
+0.0 12 -1 -1 -1 -1 -1 -1 0 0 1 0 0 0 1.0 1.0 1.0 1.0 1.0 1.0 0 0 0 0 0 0
 -1 -1 4 1 #"\0"
 0 -1 1 #"\0"
-1.0 0 92 -1 -1 -1 -1 -1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 255 255 0 -1 -1
-          0 554 0 4 3 85
+1.0 0 92 -1 -1 -1 -1 -1 0 0 0 0 0 1 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
+255 0 -1 -1           0 609 0 4 3 85
 (
  #";; The first three lines of this file were inserted by DrRacket. The"
  #"y record metadata"
@@ -281,18 +280,15 @@
  #";; about the language level of this file in a form that our tools ca"
  #"n easily process."
 ) 0 0 4 29 1 #"\n"
-0 0 4 3 123
+0 0 4 3 414
 (
  #"#reader(lib \"htdp-beginner-abbr-reader.ss\" \"lang\")((modname hwk2"
- #") (read-case-sensitive #t) (teachpacks ((lib \"universe.rkt\""
-) 0 0 4 3 294
-(
- #" \"teachpack\" \"2htdp\") (lib \"image.rkt\" \"teachpack\" \"2htdp\""
- #") (lib \"batch-io.rkt\" \"teachpack\" \"2htdp\"))) (htdp-settings #("
- #"#t constructor repeating-decimal "
- #"#f #t none #f ((lib \"universe.r"
- #"kt\" \"teachpack\" \"2htdp\") (lib \"image.rkt\" \"teachpack\" \"2ht"
- #"dp\") (lib \"batch-io.rkt\" \"teachpack\" \"2htdp\")) #f)))"
+ #") (read-case-sensitive #t) (teachpacks ((lib \"universe.rkt\" \"teac"
+ #"hpack\" \"2htdp\") (lib \"image.rkt\" \"teachpack\" \"2htdp\") (lib "
+ #"\"batch-io.rkt\" \"teachpack\" \"2htdp\"))) (htdp-settings #(#t cons"
+ #"tructor repeating-decimal #f #t none #f ((lib \"universe.rkt\" \"tea"
+ #"chpack\" \"2htdp\") (lib \"image.rkt\" \"teachpack\" \"2htdp\") (lib"
+ #" \"batch-io.rkt\" \"teachpack\" \"2htdp\")))))"
 ) 0 0 4 29 1 #"\n"
 0 0 17 3 33 #";; =====Homework Assigment 2====="
 0 0 24 29 1 #"\n"
@@ -312,6 +308,67 @@
  #";; http://web.cs.wpi.edu/~cs1102/a15/Assignments/grading-general.htm"
  #"l"
 ) 0 0 24 29 1 #"\n"
+0 0 24 29 1 #"\n"
+0 0 17 3 39 #"#| Documentation of Functions & Objects"
+0 0 17 29 1 #"\n"
+0 0 17 3 27 #"delta is a (make-delta x y)"
+0 0 17 29 1 #"\n"
+0 0 17 3 30 #"gfx is a (make-gfx image posn)"
+0 0 17 29 1 #"\n"
+0 0 17 3 33 #"plane is a (make-plane gfx delta)"
+0 0 17 29 1 #"\n"
+0 0 17 3 74
+(
+ #"fire is a (make-fire gfx intensity) , where intensity is a number be"
+ #"tween "
+) 0 0 17 3 7 #"1 and 3"
+0 0 17 29 1 #"\n"
+0 0 17 3 33 #"water is a (make-water gfx delta)"
+0 0 17 29 1 #"\n"
+0 0 17 3 40 #"object is either a water, plane, or fire"
+0 0 17 29 1 #"\n"
+0 0 17 3 24 #"LOO is a list of objects"
+0 0 17 29 1 #"\n"
+0 0 17 3 22 #"LOW is a list of water"
+0 0 17 29 1 #"\n"
+0 0 17 3 21 #"LOF is a list of fire"
+0 0 17 29 1 #"\n"
+0 0 17 3 37 #"world is a (make-world LOF LOW plane)"
+0 0 17 29 1 #"\n"
+0 0 17 29 1 #"\n"
+0 0 17 29 1 #"\n"
+0 0 17 3 15 #"===FUNCTIONS==="
+0 0 17 29 1 #"\n"
+0 0 17 29 1 #"\n"
+0 0 17 3 14 #"- world -> LOG"
+0 0 17 29 1 #"\n"
+0 0 17 3 36 #"draw-world (world -> produces scene)"
+0 0 17 29 1 #"\n"
+0 0 17 3 61
+#"draw-LOO: (LOO -> draws all the objects onto an empty pallet)"
+0 0 17 29 1 #"\n"
+0 0 17 3 24 #"get-gfx: (object -> gfx)"
+0 0 17 29 1 #"\n"
+0 0 17 3 40 #"process-keys: (world key-event -> world)"
+0 0 17 29 1 #"\n"
+0 0 17 29 1 #"\n"
+0 0 17 3 31 #";; plane-move: (plane -> plane)"
+0 0 17 29 1 #"\n"
+0 0 17 3 45 #";; plane-process-key: (plane symbol -> plane)"
+0 0 17 29 1 #"\n"
+0 0 17 3 31 #";; plane-flip: (plane -> plane)"
+0 0 17 29 1 #"\n"
+0 0 17 3 30 #";; fire-reduce: (fire -> fire)"
+0 0 17 29 1 #"\n"
+0 0 17 3 38 #";; collision?: (fire water -> boolean)"
+0 0 17 29 1 #"\n"
+0 0 17 3 39 #";; collision-apply (LOW LOF -> LOW LOF)"
+0 0 17 29 1 #"\n"
+0 0 17 3 25 #";; LOW-move: (LOW -> LOW)"
+0 0 17 29 1 #"\n"
+0 0 17 29 1 #"\n"
+0 0 17 3 2 #"|#"
+0 0 24 29 1 #"\n"
 0 0 24 29 1 #"\n"
 0 0 24 3 1 #"("
 0 0 15 3 6 #"define"
@@ -1861,8 +1918,7 @@
 0 0 17 3 9 #"INITWORLD"
 0 0 17 3 2 #" ("
 0 0 17 3 10 #"make-world"
-0 0 17 3 1 #" "
-0 0 17 3 10 #"TEMPLIST))"
+0 0 17 3 11 #" TEMPLIST))"
 0 0 24 29 1 #"\n"
 0 0 17 3 19 #";; graphics-object "
 0 0 24 29 1 #"\n"
